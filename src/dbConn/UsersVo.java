@@ -17,18 +17,18 @@ public class UsersVo {
 	 * constructor
 	 */
 	public UsersVo () { }
-	public UsersVo (String id, String name, String pwd, String email, String phone, String photo) { // column of PK or not null
+	public UsersVo (String id, String name, String pwd, String email, String phone) { // columns of PK or not null
 		this.id = id;
 		this.name = name;
 		this.pwd = pwd;
 		this.email = email;
 		this.phone = phone;
-		this.photo = photo;
 	}
 	
 	/*
 	 * override equals and hashcode
 	 */
+	// vo 객체 내부의 id 로 비교
 	@Override
 	public boolean equals(Object obj) {
 		boolean b = false;
@@ -43,6 +43,7 @@ public class UsersVo {
 		return b;
 	}
 	
+	// 해시코드는, id 의 해시코드 + name 의 해시코드
 	@Override
 	public int hashCode() {
 		return this.id.hashCode() + this.name.hashCode();

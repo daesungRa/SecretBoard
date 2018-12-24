@@ -37,13 +37,36 @@ public class UsersDao {
 	 * creat new account
 	 */
 	public boolean insert(UsersVo vo) {
-		boolean b = false;
+		boolean result = false;
 		
 		try {
+			conn.setAutoCommit(false);
+			// 필수입력사항인 id, name, pwd, email, phone 만 입력
+			// photo, photoori 는 추후 개인프로필 수정에서 등록 가능
+			sql = "insert into users (id, name, pwd, email, phone) values ( "
+					+ "	?, ?, ?, ?, ? ) ";
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, vo.getId());
+			ps.setString(2, vo.getName());
+			ps.setString(3, vo.getPwd());
+			ps.setString(4, vo.getEmail());
+			ps.setString(5, vo.getPhone());
+			int i = ps.executeUpdate();
+			
+			if (i > 0) {
+				result = true;
+				// 로그인 성공 시 커밋
+				conn.commit();
+			} else {
+				// 로그인 실패 시 롤백
+				conn.rollback();
+			}
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			try {
+				// 에러 발생 시 롤백
 				conn.rollback();
 			} catch (Exception ex2) { }
 		} finally {
@@ -52,7 +75,43 @@ public class UsersDao {
 			} catch (Exception ex) {}
 		}
 		
-		return b;
+		return result;
+	}
+	
+	/*
+	 * login
+	 * 1 이 리턴되면 로그인 성공, 2 가 리턴되면 비밀번호가 맞지 않음, 3 이 리턴되면 아이디가 존재하지 않음
+	 */
+	public int login(String id, String pwd) {
+		int result = 0;
+		try {
+			
+			// 1 이 리턴되면 로그인 성공, 2 가 리턴되면 비밀번호가 맞지 않음, 3 이 리턴되면 아이디가 존재하지 않음
+			sql = "select status from ( "
+					+ "	select 1 status from users where id = ? and pwd = ? "
+					+ "	union all "
+					+ "	select 2 status from users where id = ? "
+					+ "	union all "
+					+ "	select 3 status from dual "
+					+ ") where rownum <= 1"; // 1 ~ 3 의 행이 출력됨. 그 중 우선적으로 필터링된 첫번째 행만 캐치
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, pwd);
+			ps.setString(3, id);
+			rs = ps.executeQuery();
+			rs.next(); // ResultSet.next() 메서드를 호출해야 그 값을 불러올 수 있음
+			
+			result = rs.getInt("status");
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				closeRtn();
+			} catch (Exception ex) { }
+		}
+		return result;
 	}
 	
 	/*

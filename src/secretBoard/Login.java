@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -14,13 +15,21 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+
+import dbConn.UsersDao;
+
 import java.awt.SystemColor;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Scanner;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 
@@ -31,7 +40,7 @@ public class Login extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JPanel panel;
 	private JTextField txtId;
-	private JTextField txtPwd;
+	private JPasswordField txtPwd;
 	private JButton btnLogin;
 	private JLabel lblJoin;
 	private JLabel lblFindAccount;
@@ -71,8 +80,8 @@ public class Login extends JFrame {
 		contentPane.add(getLblNewLabel_3(), BorderLayout.NORTH);
 		contentPane.add(getPanel_1(), BorderLayout.CENTER);
 		
+		// 실행시 아이디를 입력하는 텍스트 필드가 자동으로 포커싱됨
 		txtId.requestFocus();
-		txtId.setSelectionStart(0);
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -98,7 +107,7 @@ public class Login extends JFrame {
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("Secret Diary");
-			lblNewLabel_3.setFont(new Font("Andalus", lblNewLabel_3.getFont().getStyle() | Font.BOLD | Font.ITALIC, 40));
+			lblNewLabel_3.setFont(new Font("Bookman Old Style", lblNewLabel_3.getFont().getStyle() | Font.BOLD | Font.ITALIC, 40));
 			lblNewLabel_3.setForeground(Color.WHITE);
 			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNewLabel_3.setPreferredSize(new Dimension(57, 200));
@@ -119,17 +128,22 @@ public class Login extends JFrame {
 		}
 		return panel;
 	}
+	
+	// 아이디 입력 필드
 	private JTextField getTxtId() {
 		if (txtId == null) {
 			txtId = new JTextField();
-			txtId.setFont(new Font("Arial Black", Font.PLAIN, 12));
+			txtId.setFont(new Font("Bookman Old Style", Font.BOLD, 12));
 			txtId.addFocusListener(new FocusAdapter() {
+				
+				// 해당 텍스트필드가 포커싱되면 기존의 전체 텍스트 블럭처리, 기존의 회색 글씨가 검정색으로 변환
 				@Override
 				public void focusGained(FocusEvent e) {
 					txtId.setSelectionStart(0);
 					txtId.setSelectionEnd(txtId.getText().length());
 					txtId.setForeground(Color.BLACK);
 				}
+				
 			});
 			txtId.setForeground(Color.GRAY);
 			txtId.setText("insert ID");
@@ -138,18 +152,34 @@ public class Login extends JFrame {
 		}
 		return txtId;
 	}
-	private JTextField getTxtPwd() {
+	
+	// 비번 입력 필드
+	private JPasswordField getTxtPwd() {
 		if (txtPwd == null) {
-			txtPwd = new JTextField();
-			txtPwd.setFont(new Font("Arial Black", Font.PLAIN, 12));
+			txtPwd = new JPasswordField();
 			txtPwd.addFocusListener(new FocusAdapter() {
+				
+				// 해당 텍스트필드가 포커싱되면 기존의 전체 텍스트 블럭처리, 기존의 회색 글씨가 검정색으로 변환
 				@Override
 				public void focusGained(FocusEvent e) {
 					txtPwd.setSelectionStart(0);
-					txtPwd.setSelectionEnd(txtPwd.getText().length());
+					txtPwd.setSelectionEnd(txtPwd.getPassword().length);
 					txtPwd.setForeground(Color.BLACK);
 				}
+				
 			});
+			txtPwd.addKeyListener(new KeyAdapter() {
+				
+				// 비번입력 후 엔터 누르면 자동으로 Log in 버튼이 눌림
+				@Override
+				public void keyReleased(KeyEvent ke) {
+					if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+						btnLogin.doClick();
+					}
+				}
+				
+			});
+			txtPwd.setFont(new Font("Bookman Old Style", Font.BOLD, 12));
 			txtPwd.setForeground(Color.GRAY);
 			txtPwd.setText("insert Password");
 			txtPwd.setColumns(10);
@@ -160,7 +190,53 @@ public class Login extends JFrame {
 	private JButton getBtnLogin() {
 		if (btnLogin == null) {
 			btnLogin = new JButton("Log In");
-			btnLogin.setFont(new Font("Arial Black", Font.BOLD, 14));
+			btnLogin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					// 아이디와 패스워드 검증
+					String id = txtId.getText().trim();
+					// passwordField 는 char[] 로 반환되므로 String 으로 변환
+					String pwd = String.valueOf(txtPwd.getText().trim());
+					
+					// 입력된 아이디와 패스워드로 로그인 확인
+					UsersDao dao = new UsersDao();
+					int result = dao.login(id, pwd);
+					// System.out.println(result);
+					
+					if (result == 1) {
+						Main main = new Main();
+						main.setVisible(true);
+						
+						// 로그인 성공했다면 현재 페이지는 닫음
+						Login.this.dispose();
+					} else if (result == 2) {
+						JOptionPane.showMessageDialog(Login.this, "입력하신 비밀번호가 다릅니다.", "Login Fail", 1);
+						
+						/*
+						// 비번만 포커싱
+						txtPwd.setText("insert Password");
+						txtPwd.requestFocus();
+						
+						// 버퍼에 13 이 남아있을 가능성이 있으므로 비워준다
+						String str = new Scanner(System.in).nextLine();
+						System.out.println(str);
+						*/
+						
+						// 일단 id 로 포커싱되게..
+						txtPwd.setText("insert Password");
+						txtId.requestFocus();
+					} else {
+						JOptionPane.showMessageDialog(Login.this, "입력하신 아이디가 존재하지 않습니다.", "Login Fail", 1);
+						
+						// 각 필드 초기화 후 포커싱
+						txtId.setText("insert ID");
+						txtPwd.setText("insert Password");
+						txtId.requestFocus();
+					}
+					
+				}
+			});
+			btnLogin.setFont(new Font("Bookman Old Style", Font.BOLD, 14));
 			btnLogin.setBounds(63, 159, 116, 30);
 		}
 		return btnLogin;
@@ -173,10 +249,12 @@ public class Login extends JFrame {
 				public void mouseClicked(MouseEvent me) {
 					Join join = new Join();
 					join.setVisible(true);
+					
+					Login.this.dispose();
 				}
 			});
 			lblJoin.setForeground(Color.WHITE);
-			lblJoin.setFont(new Font("Andalus", Font.BOLD | Font.ITALIC, 10));
+			lblJoin.setFont(new Font("Bookman Old Style", Font.BOLD | Font.ITALIC, 9));
 			lblJoin.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblJoin.setBounds(122, 207, 57, 15);
 		}
@@ -186,7 +264,7 @@ public class Login extends JFrame {
 		if (lblFindAccount == null) {
 			lblFindAccount = new JLabel("Forgotten your Account?");
 			lblFindAccount.setForeground(Color.WHITE);
-			lblFindAccount.setFont(new Font("Andalus", Font.BOLD | Font.ITALIC, 10));
+			lblFindAccount.setFont(new Font("Bookman Old Style", Font.BOLD | Font.ITALIC, 9));
 			lblFindAccount.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFindAccount.addMouseListener(new MouseAdapter() {
 				@Override
