@@ -22,3 +22,4 @@ This is my semi-project for private board
 ## Fixes
 
 - [181222] oracle 11g xe 와 JDBC 를 사용함
+- [181224] git 에 oracle 로 업로드 했으나, 집에서 쓰는 로컬 PC 의 DB 는 MySql 이므로 oracle 을 새로 설치함 (쿼리 문법상 다소간의 차이가 있음)
