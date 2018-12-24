@@ -21,4 +21,4 @@ This is my semi-project for private board
 
 ## Fixes
 
-- [181222] oracle 11g xe 와 JDBC 를 
+- [181222] oracle 11g xe 와 JDBC 를 사용함
