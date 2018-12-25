@@ -117,6 +117,38 @@ public class UsersDao {
 	/*
 	 * modify user info
 	 */
+	public UsersVo find(UsersVo vo) {
+		UsersVo resultVo = new UsersVo();
+		
+		try {
+			sql = "select id, pwd, name from users where "
+					+ "	name = ? and email = ? and phone = ? ";
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, vo.getName());
+			ps.setString(2, vo.getEmail());
+			ps.setString(3, vo.getPhone());
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				resultVo.setId(rs.getString("id"));
+				resultVo.setPwd(rs.getString("pwd"));
+				resultVo.setName(rs.getString("name"));
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				closeRtn();
+			} catch (Exception ex) {}
+		}
+		
+		return resultVo;
+	}
+	
+	/*
+	 * modify user info
+	 */
 	public boolean modify(UsersVo vo) {
 		boolean b = false;
 		
@@ -139,16 +171,21 @@ public class UsersDao {
 	/*
 	 * appear user info
 	 */
-	public UsersVo view(String id) {
+	public UsersVo getUserInfo(String id) {
 		UsersVo vo = new UsersVo();
 		
 		try {
+			// 일단은 Main 화면에 유저이름 표현하기 위해 이름만 검색함
+			sql = "select name from users where id = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
 			
+			if (rs.next()) {
+				vo.setName(rs.getString("name"));
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			try {
-				conn.rollback();
-			} catch (Exception ex2) { }
 		} finally {
 			try {
 				closeRtn();
@@ -161,7 +198,7 @@ public class UsersDao {
 	/*
 	 * delete user info
 	 */
-	public boolean delete(UsersVo vo) {
+	public boolean dropUser(UsersVo vo) {
 		boolean b = false;
 		
 		try {

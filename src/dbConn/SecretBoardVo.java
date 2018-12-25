@@ -9,19 +9,19 @@ public class SecretBoardVo {
 	private String content;
 	private String id; // FK, NN
 	private String pwd; // NN
-	private int cpublic; // default 0
+	private int isPublic; // private 0, public 1
 	private String cdate; // default sysdate
 
 	/*
 	 * constructor
 	 */
 	public SecretBoardVo() { }
-	public SecretBoardVo(String subject, String content, String id, String pwd, int cpublic) { // serial 은 자동증가
+	public SecretBoardVo(String subject, String content, String id, String pwd, int isPublic) { // serial 은 자동증가
 		this.subject = subject;
 		this.content = content;
 		this.id = id;
 		this.pwd = pwd;
-		this.cpublic = cpublic;
+		this.isPublic = isPublic;
 	}
 
 	/*
@@ -57,11 +57,11 @@ public class SecretBoardVo {
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
 	}
-	public int getCpublic() {
-		return cpublic;
+	public int getIsPublic() {
+		return isPublic;
 	}
-	public void setCpublic(int cpublic) {
-		this.cpublic = cpublic;
+	public void setIsPublic(int isPublic) {
+		this.isPublic = isPublic;
 	}
 	public String getCdate() {
 		return cdate;

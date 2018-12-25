@@ -124,9 +124,42 @@ public class SecretBoardDao {
 	}
 	
 	/*
-	 * find 로 (제목 | 내용 | 아이디) 검색하여 List 에 담아 리턴
+	 * [개인 글 목록]
+	 * 매개변수로 입력된 아이디에 해당하는 모든 글을 List 에 담아 반환 > Main 페이지에서 사용
+	 * (serial, subject, id, cdate, isPublic)
 	 */
-	public List<SecretBoardVo> searchList(String find){
+	public List<SecretBoardVo> searchAll(String id){
+		List<SecretBoardVo> searchList = new ArrayList<SecretBoardVo>();
+		
+		try {
+			sql = "select serial, subject, id, cdate, ispublic from sboard where id = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				SecretBoardVo vo = new SecretBoardVo();
+				vo.setSerial(rs.getString("serial"));
+				vo.setSubject(rs.getString("subject"));
+				vo.setId(rs.getString("id"));
+				vo.setCdate(rs.getString("cdate"));
+				vo.setIsPublic(rs.getInt("ispublic"));
+				
+				searchList.add(vo);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return searchList;
+	}
+	
+	/*
+	 * [공개 글 목록]
+	 * 매개변수로 입력된 아이디에 해당하는 공개 글을 List 에 담아 반환 > Main 페이지에서 사용
+	 * (serial, subject, id, cdate, isPublic)
+	 */
+	public List<SecretBoardVo> searchPublic(String id){
 		List<SecretBoardVo> searchList = new ArrayList<SecretBoardVo>();
 		
 		try {

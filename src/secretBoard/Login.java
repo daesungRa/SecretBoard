@@ -11,19 +11,16 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
 import dbConn.UsersDao;
 
-import java.awt.SystemColor;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Scanner;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ActionListener;
@@ -196,6 +193,7 @@ public class Login extends JFrame {
 					// 아이디와 패스워드 검증
 					String id = txtId.getText().trim();
 					// passwordField 는 char[] 로 반환되므로 String 으로 변환
+					@SuppressWarnings("deprecation")
 					String pwd = String.valueOf(txtPwd.getText().trim());
 					
 					// 입력된 아이디와 패스워드로 로그인 확인
@@ -204,7 +202,7 @@ public class Login extends JFrame {
 					// System.out.println(result);
 					
 					if (result == 1) {
-						Main main = new Main();
+						Main main = new Main(id);
 						main.setVisible(true);
 						
 						// 로그인 성공했다면 현재 페이지는 닫음

@@ -69,7 +69,7 @@ public class Join extends JFrame {
 	 * Create the frame.
 	 */
 	public Join() {
-		setMinimumSize(new Dimension(640, 550));
+		setMinimumSize(new Dimension(550, 470));
 		setPreferredSize(new Dimension(500, 800));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -90,31 +90,31 @@ public class Join extends JFrame {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
-			lblNewLabel.setPreferredSize(new Dimension(115, 15));
+			lblNewLabel.setPreferredSize(new Dimension(95, 15));
 		}
 		return lblNewLabel;
 	}
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("");
-			lblNewLabel_1.setPreferredSize(new Dimension(115, 15));
+			lblNewLabel_1.setPreferredSize(new Dimension(95, 15));
 		}
 		return lblNewLabel_1;
 	}
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("");
-			lblNewLabel_2.setPreferredSize(new Dimension(57, 95));
+			lblNewLabel_2.setPreferredSize(new Dimension(57, 50));
 		}
 		return lblNewLabel_2;
 	}
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("Join to Secret Diary");
-			lblNewLabel_3.setFont(new Font("Bookman Old Style", lblNewLabel_3.getFont().getStyle() | Font.BOLD | Font.ITALIC, 40));
+			lblNewLabel_3.setFont(new Font("Bookman Old Style", lblNewLabel_3.getFont().getStyle() | Font.BOLD | Font.ITALIC, 36));
 			lblNewLabel_3.setForeground(Color.WHITE);
 			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_3.setPreferredSize(new Dimension(57, 150));
+			lblNewLabel_3.setPreferredSize(new Dimension(57, 140));
 		}
 		return lblNewLabel_3;
 	}
@@ -155,7 +155,7 @@ public class Join extends JFrame {
 			});
 			txtId.setForeground(Color.GRAY);
 			txtId.setText("insert ID");
-			txtId.setBounds(63, 41, 116, 21);
+			txtId.setBounds(40, 25, 116, 21);
 			txtId.setColumns(10);
 		}
 		return txtId;
@@ -195,7 +195,7 @@ public class Join extends JFrame {
 			});
 			txtPwd01.setForeground(Color.GRAY);
 			txtPwd01.setColumns(10);
-			txtPwd01.setBounds(63, 103, 116, 21);
+			txtPwd01.setBounds(40, 87, 116, 21);
 		}
 		return txtPwd01;
 	}
@@ -248,7 +248,7 @@ public class Join extends JFrame {
 				}
 			});
 			btnLogin.setFont(new Font("Bookman Old Style", Font.BOLD, 14));
-			btnLogin.setBounds(232, 195, 100, 21);
+			btnLogin.setBounds(200, 180, 100, 21);
 		}
 		return btnLogin;
 	}
@@ -269,7 +269,7 @@ public class Join extends JFrame {
 			txtName.setFont(new Font("Bookman Old Style", Font.BOLD, 12));
 			txtName.setForeground(Color.GRAY);
 			txtName.setText("insert NAME");
-			txtName.setBounds(63, 72, 116, 21);
+			txtName.setBounds(40, 56, 116, 21);
 			txtName.setColumns(10);
 		}
 		return txtName;
@@ -302,7 +302,7 @@ public class Join extends JFrame {
 			txtPhone.setForeground(Color.GRAY);
 			txtPhone.setFont(new Font("Bookman Old Style", Font.BOLD, 12));
 			txtPhone.setText("insert PHONE");
-			txtPhone.setBounds(63, 196, 116, 21);
+			txtPhone.setBounds(40, 180, 116, 21);
 			txtPhone.setColumns(10);
 		}
 		return txtPhone;
@@ -324,7 +324,7 @@ public class Join extends JFrame {
 			txtEmail.setForeground(Color.GRAY);
 			txtEmail.setFont(new Font("Bookman Old Style", Font.BOLD, 12));
 			txtEmail.setText("insert E-MAIL");
-			txtEmail.setBounds(63, 165, 116, 21);
+			txtEmail.setBounds(40, 149, 116, 21);
 			txtEmail.setColumns(10);
 		}
 		return txtEmail;
@@ -363,7 +363,7 @@ public class Join extends JFrame {
 			txtPwd02.setForeground(Color.GRAY);
 			txtPwd02.setFont(new Font("Bookman Old Style", Font.BOLD, 12));
 			txtPwd02.setColumns(10);
-			txtPwd02.setBounds(63, 134, 116, 21);
+			txtPwd02.setBounds(40, 118, 116, 21);
 		}
 		return txtPwd02;
 	}
@@ -372,7 +372,7 @@ public class Join extends JFrame {
 			lblPwd02 = new JLabel("");
 			lblPwd02.setForeground(Color.DARK_GRAY);
 			lblPwd02.setFont(new Font("Bookman Old Style", Font.BOLD, 10));
-			lblPwd02.setBounds(187, 138, 185, 15);
+			lblPwd02.setBounds(168, 124, 164, 15);
 		}
 		return lblPwd02;
 	}
@@ -381,7 +381,7 @@ public class Join extends JFrame {
 			lblPwd01 = new JLabel("insert PASSWORD");
 			lblPwd01.setForeground(Color.DARK_GRAY);
 			lblPwd01.setFont(new Font("Bookman Old Style", Font.BOLD, 10));
-			lblPwd01.setBounds(187, 107, 145, 15);
+			lblPwd01.setBounds(168, 91, 145, 15);
 		}
 		return lblPwd01;
 	}
