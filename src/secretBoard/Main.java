@@ -240,7 +240,7 @@ public class Main extends JFrame {
 		if (lblNewLabel_4 == null) {
 			lblNewLabel_4 = new JLabel("[회원정보 수정]");
 			lblNewLabel_4.setPreferredSize(new Dimension(120, 15));
-			lblNewLabel_4.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
+			lblNewLabel_4.setFont(new Font("맑은 고딕", Font.PLAIN, 9));
 			lblNewLabel_4.setForeground(Color.WHITE);
 		}
 		return lblNewLabel_4;
