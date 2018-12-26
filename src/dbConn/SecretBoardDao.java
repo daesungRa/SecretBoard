@@ -128,13 +128,28 @@ public class SecretBoardDao {
 	 * 매개변수로 입력된 아이디에 해당하는 모든 글을 List 에 담아 반환 > Main 페이지에서 사용
 	 * (serial, subject, id, cdate, isPublic)
 	 */
-	public List<SecretBoardVo> searchAll(String id){
+	public List<SecretBoardVo> searchAll(String id, int pageNum){
 		List<SecretBoardVo> searchList = new ArrayList<SecretBoardVo>();
+		int startContent = 1; // 시작 글의 행번호
 		
 		try {
-			sql = "select serial, subject, id, cdate, ispublic from sboard where id = ? ";
+			// 페이징 처리, 행 삽입 및 정렬
+			sql = "select * from ( " // paging
+					+ "		select rownum rno, sboard.* from ( " // 행 추가
+					+ "			select b.serial, b.subject, b.id, b.cdate, b.ispublic " // 검색 (추후 파일첨부 컬럼 추가 가능)
+					+ "				from sboard b "
+					+ "				where b.id = ? "
+					+ "				order by b.cdate desc " // 검색, 날짜별 desc 정렬
+					+ "		) sboard" // 행 추가
+					+ "	) where rno between ? and ? "; // paging (1 - 20)
+			
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, id);
+			// pageNum 에 따른 시작 글의 행번호 세팅
+			// 만약 5 페이지라면, 시작 글의 행번호는 81 번이 됨 > 81 - 100 번 글 반환
+			startContent += ((pageNum - 1) * 20);
+			ps.setInt(2, startContent);
+			ps.setInt(3, startContent + 19);
 			rs = ps.executeQuery();
 			
 			while (rs.next()) {
@@ -169,6 +184,29 @@ public class SecretBoardDao {
 		}
 		
 		return searchList;
+	}
+	
+	/*
+	 * 해당 유저의 모든 게시글 수 반환
+	 */
+	public int getTotContent(String id) {
+		// 0 이면 해당 유저의 글이 존재하지 않음
+		int tot = 0;
+		
+		try {
+			sql = " select count(*) cnt from sboard where id = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				tot = rs.getInt("cnt");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return tot;
 	}
 	
 	/*

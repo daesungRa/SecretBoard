@@ -1,5 +1,5 @@
-# SecretBoard
-This is my semi-project for private board
+﻿# SecretBoard
+This is my semi-project for secret board
 
 ## Summary
 
