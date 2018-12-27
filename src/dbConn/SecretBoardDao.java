@@ -39,14 +39,42 @@ public class SecretBoardDao {
 	 * write new content
 	 */
 	public boolean write(SecretBoardVo vo) {
-		boolean b = false;
+		boolean result = false;
 		
 		try {
+			conn.setAutoCommit(false);
+			
+			sql = "insert into sboard (serial, subject, content, id, ispublic, tags) values "
+					+ "	(seq_sboard.nextval, ?, ?, ?, ?, ?) ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, vo.getSubject());
+			ps.setString(2, vo.getContent());
+			ps.setString(3, vo.getId());
+			
+			// true 면 1 대입, 아니면 0 대입
+			if (vo.getIsPublic()) {
+				ps.setString(4, "1");
+			} else {
+				ps.setString(4, "0");
+			}
+			
+			ps.setString(5, vo.getTags());
+			
+			int i = ps.executeUpdate();
+			
+			// 실행 성공한 DML 행 수만큼 반환됨
+			if (i > 0) {
+				result = true;
+				
+				conn.setAutoCommit(true);
+				conn.commit();
+			}
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			try {
 				conn.rollback();
+				conn.setAutoCommit(true);
 			} catch (Exception ex2) { }
 		} finally {
 			try {
@@ -54,21 +82,53 @@ public class SecretBoardDao {
 			} catch (Exception ex) {}
 		}
 		
-		return b;
+		return result;
 	}
 	
 	/*
 	 * update content
 	 */
 	public boolean update(SecretBoardVo vo) {
-		boolean b = false;
+		boolean result = false;
 		
 		try {
+			conn.setAutoCommit(false);
+			sql = "update sboard "
+					+ "	set subject = ?, " // 제목
+					+ "		content = ?, " // 내용
+					+ "		tags = ?, " // 태그
+					+ "		ispublic = ?, " // 공개여부
+					+ "		cdate = sysdate " // 수정일 자동적용
+					+ "	where serial = ? "; // serial 로 글 판단
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, vo.getSubject());
+			ps.setString(2, vo.getContent());
+			ps.setString(3, vo.getTags());
+			
+			// true 면 1 대입, 아니면 0 대입
+			if (vo.getIsPublic()) {
+				ps.setString(4, "1");
+			} else {
+				ps.setString(4, "0");
+			}
+			
+			ps.setInt(5, Integer.parseInt(vo.getSerial())); // 사실 serial 은 NUMBER 형이었던 것..
+			
+			int i = ps.executeUpdate();
+			
+			// 실행 성공한 DML 행 수만큼 반환됨
+			if (i > 0) {
+				result = true;
+				
+				conn.setAutoCommit(true);
+				conn.commit();
+			}
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			try {
 				conn.rollback();
+				conn.setAutoCommit(true);
 			} catch (Exception ex2) { }
 		} finally {
 			try {
@@ -76,7 +136,7 @@ public class SecretBoardDao {
 			} catch (Exception ex) {}
 		}
 		
-		return b;
+		return result;
 	}
 	
 	/*
@@ -86,12 +146,31 @@ public class SecretBoardDao {
 		SecretBoardVo vo = new SecretBoardVo();
 		
 		try {
+			sql = " select serial, subject, content, id, to_char(cdate, 'yyyy/mm/dd') as cdate, ispublic, tags "
+					+ "	from sboard where serial = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, serial);
+			rs = ps.executeQuery();
 			
+			if (rs.next()) {
+				vo.setSerial(rs.getString("serial"));
+				vo.setSubject(rs.getString("subject"));
+				vo.setContent(rs.getString("content"));
+				vo.setId(rs.getString("id"));
+				vo.setCdate(rs.getString("cdate"));
+
+				// '0' or '1' 로 반환되는 문자열에 따라 boolean 형 데이터 저장
+				String isPublic = rs.getString("ispublic");
+				if (isPublic.equals("0")) { // 0 == false == private
+					vo.setIsPublic(false);
+				} else if (isPublic.equals("1")) { // 1 == true == public
+					vo.setIsPublic(true);
+				}
+				
+				vo.setTags(rs.getString("tags"));
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			try {
-				conn.rollback();
-			} catch (Exception ex2) { }
 		} finally {
 			try {
 				closeRtn();
@@ -104,7 +183,7 @@ public class SecretBoardDao {
 	/*
 	 * delete content
 	 */
-	public boolean delete(SecretBoardVo vo) {
+	public boolean delete(String serial) {
 		boolean b = false;
 		
 		try {
@@ -158,7 +237,60 @@ public class SecretBoardDao {
 				vo.setSubject(rs.getString("subject"));
 				vo.setId(rs.getString("id"));
 				vo.setCdate(rs.getString("cdate"));
-				vo.setIsPublic(rs.getInt("ispublic"));
+				
+				// '0' or '1' 로 반환되는 문자열에 따라 boolean 형 데이터 저장
+				String isPublic = rs.getString("ispublic");
+				if (isPublic.equals("0")) { // 0 == false == private
+					vo.setIsPublic(false);
+				} else if (isPublic.equals("1")) { // 1 == true == public
+					vo.setIsPublic(true);
+				}
+				
+				searchList.add(vo);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return searchList;
+	}
+	
+	public List<SecretBoardVo> searchByDate(String id, String format){
+		List<SecretBoardVo> searchList = new ArrayList<SecretBoardVo>();
+		int startContent = 1; // 시작 글의 행번호
+		
+		try {
+			// 페이징 처리, 행 삽입 및 정렬
+			sql = "select * from ( " // paging
+					+ "		select rownum rno, sboard.* from ( " // 행 추가
+					+ "			select b.serial, b.subject, b.id, b.cdate, b.ispublic " // 검색 (추후 파일첨부 컬럼 추가 가능)
+					+ "				from sboard b "
+					+ "				where b.id = ? and to_char(b.cdate, 'yyyy/mm/dd') = ? "
+					+ "				order by b.cdate desc " // 검색, 날짜별 desc 정렬
+					+ "		) sboard" // 행 추가
+					+ "	) where rno between ? and ? "; // paging (1 - 20)
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, format);
+			ps.setInt(3, startContent);
+			ps.setInt(4, startContent + 19);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				SecretBoardVo vo = new SecretBoardVo();
+				vo.setSerial(rs.getString("serial"));
+				vo.setSubject(rs.getString("subject"));
+				vo.setId(rs.getString("id"));
+				vo.setCdate(rs.getString("cdate"));
+				
+				// '0' or '1' 로 반환되는 문자열에 따라 boolean 형 데이터 저장
+				String isPublic = rs.getString("ispublic");
+				if (isPublic.equals("0")) { // 0 == false == private
+					vo.setIsPublic(false);
+				} else if (isPublic.equals("1")) { // 1 == true == public
+					vo.setIsPublic(true);
+				}
 				
 				searchList.add(vo);
 			}

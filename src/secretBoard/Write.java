@@ -70,36 +70,12 @@ public class Write extends JFrame {
 	private JTextArea mainTextArea;
 	private JButton btnCancel;
 	private JPanel panel_4;
-	private JCheckBox isPublic;
+	private JCheckBox ckIsPublic;
 	private JLabel lblNewLabel_5;
 	
 	/*
 	 * create method
 	 */
-	public void search(String id, int pageNum) {
-		// 생성자에서 해당 유저의 글을 페이지별로 검색해 화면에 출력
-		SecretBoardDao dao = new SecretBoardDao();
-		List<SecretBoardVo> searchList = dao.searchAll(id, pageNum);
-		
-		// 일단 테이블 초기화
-		tModel.setRowCount(0);
-		
-		// 반환된 List 에 저장된 글 개수만큼 반복하며 테이블에 추가한다
-		for (int i = 0; i < searchList.size(); i++) {
-			SecretBoardVo bvo = searchList.get(i);
-			if (bvo.getIsPublic() == 0) { // 반환값이 0 이면 private
-				Object[] obj = {bvo.getSerial(), bvo.getSubject(), bvo.getId(), bvo.getCdate(), "private"};
-				tModel.addRow(obj);
-			} else { // else, 반환값이 1
-				Object[] obj = {bvo.getSerial(), bvo.getSubject(), bvo.getId(), bvo.getCdate(), "public"};
-				tModel.addRow(obj);
-			}
-		}
-	}
-	
-	public void setPageLabel(int pageNum) {
-		// pageNum 가 6 보다 작다면
-	}
 
 	/**
 	 * Launch the application.
@@ -200,10 +176,32 @@ public class Write extends JFrame {
 			btnWrite = new JButton("등 록");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					/*Write write = new Write();
-					write.setVisible(true);
 					
-					Main.this.dispose();*/
+					// 입력된 게시글 데이터를 DAO 로 DB 에 저장하고 완료 메시지 출력 후 메인 페이지로 넘어감
+					// 글 제목과 내용의 무결성 체크
+					String subject = txtSubject.getText();
+					String tags = txtTags.getText().trim();
+					String content = mainTextArea.getText();
+					String id = userId; // id 가 null 인가 체크
+					boolean b = ckIsPublic.isSelected(); // toggle 버튼이 클릭되면 true, 아니면 false
+					
+					// vo 객체 생성
+					SecretBoardVo vo = new SecretBoardVo(subject, content, id, b, tags);
+					
+					// write 의 실행결과 반환 (boolean)
+					b = new SecretBoardDao().write(vo);
+					
+					if (b) {
+						JOptionPane.showMessageDialog(Write.this, "새 글 등록 성공", "Write Success", 1);
+						
+						new Main(id).setVisible(true);
+						Write.this.dispose();
+					} else {
+						JOptionPane.showMessageDialog(Write.this, "새 글 등록 실패", "Write Fail", 2);
+						
+						// 실패 이유 설명 > 사실 상단 무결성 체크 부분에서 걸러짐
+					}
+					
 				}
 			});
 			btnWrite.setFont(new Font("맑은 고딕", Font.BOLD, 12));
@@ -324,7 +322,7 @@ public class Write extends JFrame {
 				}
 			});
 			txtSubject.setForeground(new Color(128, 128, 128));
-			txtSubject.setBackground(new Color(230, 230, 230));
+			txtSubject.setBackground(new Color(210, 210, 210));
 			txtSubject.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 			txtSubject.setText("제목을 입력하세요");
 			txtSubject.setPreferredSize(new Dimension(6, 32));
@@ -353,7 +351,7 @@ public class Write extends JFrame {
 			});
 			txtTags.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 			txtTags.setForeground(new Color(128, 128, 128));
-			txtTags.setBackground(new Color(230, 230, 230));
+			txtTags.setBackground(new Color(210, 210, 210));
 			txtTags.setText("태그를 입력하세요");
 			txtTags.setPreferredSize(new Dimension(6, 30));
 			txtTags.setColumns(10);
@@ -371,7 +369,7 @@ public class Write extends JFrame {
 	private JTextArea getMainTextArea() {
 		if (mainTextArea == null) {
 			mainTextArea = new JTextArea();
-			mainTextArea.setBackground(new Color(230, 230, 230));
+			mainTextArea.setBackground(new Color(210, 210, 210));
 		}
 		return mainTextArea;
 	}
@@ -399,19 +397,19 @@ public class Write extends JFrame {
 			panel_4.setPreferredSize(new Dimension(10, 50));
 			panel_4.setBackground(new Color(169, 169, 169));
 			panel_4.setLayout(null);
-			panel_4.add(getIsPublic());
+			panel_4.add(getCkIsPublic());
 			panel_4.add(getLblNewLabel_5());
 		}
 		return panel_4;
 	}
-	private JCheckBox getIsPublic() {
-		if (isPublic == null) {
-			isPublic = new JCheckBox("Public");
-			isPublic.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-			isPublic.setBackground(new Color(169, 169, 169));
-			isPublic.setBounds(569, 6, 74, 38);
+	private JCheckBox getCkIsPublic() {
+		if (ckIsPublic == null) {
+			ckIsPublic = new JCheckBox("Public");
+			ckIsPublic.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+			ckIsPublic.setBackground(new Color(169, 169, 169));
+			ckIsPublic.setBounds(569, 6, 74, 38);
 		}
-		return isPublic;
+		return ckIsPublic;
 	}
 	private JLabel getLblNewLabel_5() {
 		if (lblNewLabel_5 == null) {

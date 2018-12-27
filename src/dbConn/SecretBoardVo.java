@@ -8,18 +8,20 @@ public class SecretBoardVo {
 	private String subject;
 	private String content;
 	private String id; // FK, NN
-	private int isPublic; // private 0, public 1
+	private boolean isPublic; // private == false, public == true
 	private String cdate; // default sysdate
+	private String tags;
 
 	/*
 	 * constructor
 	 */
 	public SecretBoardVo() { }
-	public SecretBoardVo(String subject, String content, String id, int isPublic) { // serial 은 자동증가
+	public SecretBoardVo(String subject, String content, String id, boolean isPublic, String tags) { // serial 은 자동증가
 		this.subject = subject;
 		this.content = content;
 		this.id = id;
 		this.isPublic = isPublic;
+		this.tags = tags;
 	}
 
 	/*
@@ -49,10 +51,10 @@ public class SecretBoardVo {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public int getIsPublic() {
+	public boolean getIsPublic() {
 		return isPublic;
 	}
-	public void setIsPublic(int isPublic) {
+	public void setIsPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
 	public String getCdate() {
@@ -60,6 +62,12 @@ public class SecretBoardVo {
 	}
 	public void setCdate(String cdate) {
 		this.cdate = cdate;
+	}
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 	
 }
