@@ -103,7 +103,7 @@ public class Login extends JFrame {
 	}
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
-			lblNewLabel_3 = new JLabel("Secret Diary");
+			lblNewLabel_3 = new JLabel("Secret Board");
 			lblNewLabel_3.setFont(new Font("Bookman Old Style", lblNewLabel_3.getFont().getStyle() | Font.BOLD | Font.ITALIC, 40));
 			lblNewLabel_3.setForeground(Color.WHITE);
 			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);

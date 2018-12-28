@@ -277,6 +277,20 @@ public class Update extends JFrame {
 	private JLabel getLblLogout() {
 		if (lblLogout == null) {
 			lblLogout = new JLabel("[로그아웃]");
+			lblLogout.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					int confirm = JOptionPane.showConfirmDialog(Update.this, "로그아웃 하시겠습니까?");
+					
+					if (confirm == 0) {
+						// 창닫고 로그인 페이지로 넘어감
+						new Login().setVisible(true);
+						Update.this.dispose();
+					}
+					
+				}
+			});
 			lblLogout.setFont(new Font("맑은 고딕", Font.BOLD, 9));
 			lblLogout.setForeground(Color.WHITE);
 		}
@@ -471,12 +485,12 @@ public class Update extends JFrame {
 						boolean result = new SecretBoardDao().delete(lblSerial.getText().trim());
 						
 						if (result) {
-							JOptionPane.showMessageDialog(Update.this, "글 수정 성공", "Update Success", 1);
+							JOptionPane.showMessageDialog(Update.this, "글 삭제 성공", "Update Success", 1);
 							
 							new Main(userId).setVisible(true);
 							Update.this.dispose();
 						} else {
-							JOptionPane.showMessageDialog(Update.this, "글 수정 실패", "Update Fail", 2);
+							JOptionPane.showMessageDialog(Update.this, "글 삭제 실패", "Update Fail", 2);
 							
 							// 실패 이유 설명 > 사실 상단 무결성 체크 부분에서 걸러짐
 						}

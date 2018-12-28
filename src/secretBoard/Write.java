@@ -252,6 +252,20 @@ public class Write extends JFrame {
 	private JLabel getLblLogout() {
 		if (lblLogout == null) {
 			lblLogout = new JLabel("[로그아웃]");
+			lblLogout.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					int confirm = JOptionPane.showConfirmDialog(Write.this, "로그아웃 하시겠습니까?");
+					
+					if (confirm == 0) {
+						// 창닫고 로그인 페이지로 넘어감
+						new Login().setVisible(true);
+						Write.this.dispose();
+					}
+					
+				}
+			});
 			lblLogout.setFont(new Font("맑은 고딕", Font.BOLD, 9));
 			lblLogout.setForeground(Color.WHITE);
 		}

@@ -48,6 +48,7 @@ public class Join extends JFrame {
 	private JPasswordField txtPwd02;
 	private JLabel lblPwd02;
 	private JLabel lblPwd01;
+	private JButton btnCancel;
 
 	/**
 	 * Launch the application.
@@ -69,7 +70,7 @@ public class Join extends JFrame {
 	 * Create the frame.
 	 */
 	public Join() {
-		setMinimumSize(new Dimension(550, 470));
+		setMinimumSize(new Dimension(550, 500));
 		setPreferredSize(new Dimension(500, 800));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -110,7 +111,7 @@ public class Join extends JFrame {
 	}
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
-			lblNewLabel_3 = new JLabel("Join to Secret Diary");
+			lblNewLabel_3 = new JLabel("Join to Secret Board");
 			lblNewLabel_3.setFont(new Font("Bookman Old Style", lblNewLabel_3.getFont().getStyle() | Font.BOLD | Font.ITALIC, 36));
 			lblNewLabel_3.setForeground(Color.WHITE);
 			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
@@ -133,6 +134,7 @@ public class Join extends JFrame {
 			panel.add(getTxtPwd02());
 			panel.add(getLblPwd02());
 			panel.add(getLblPwd01());
+			panel.add(getBtnCancel());
 		}
 		return panel;
 	}
@@ -384,5 +386,19 @@ public class Join extends JFrame {
 			lblPwd01.setBounds(168, 91, 145, 15);
 		}
 		return lblPwd01;
+	}
+	private JButton getBtnCancel() {
+		if (btnCancel == null) {
+			btnCancel = new JButton("Cancel");
+			btnCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new Login().setVisible(true);
+					Join.this.dispose();
+				}
+			});
+			btnCancel.setFont(new Font("Bookman Old Style", Font.BOLD, 14));
+			btnCancel.setBounds(200, 211, 100, 21);
+		}
+		return btnCancel;
 	}
 }

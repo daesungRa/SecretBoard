@@ -38,6 +38,7 @@ public class FindUser extends JFrame {
 	private JTextField txtEmail;
 	private JTextField txtPhone;
 	private JButton btnFind;
+	private JButton btnCancel;
 
 	/**
 	 * Launch the application.
@@ -59,7 +60,7 @@ public class FindUser extends JFrame {
 	 * Create the frame.
 	 */
 	public FindUser() {
-		setMinimumSize(new Dimension(550, 350));
+		setMinimumSize(new Dimension(550, 370));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 350);
 		contentPane = new JPanel();
@@ -117,6 +118,7 @@ public class FindUser extends JFrame {
 			panel.add(getTxtEmail());
 			panel.add(getTxtPhone());
 			panel.add(getBtnFind());
+			panel.add(getBtnCancel());
 		}
 		return panel;
 	}
@@ -199,7 +201,7 @@ public class FindUser extends JFrame {
 	}
 	private JButton getBtnFind() {
 		if (btnFind == null) {
-			btnFind = new JButton("FIND");
+			btnFind = new JButton("Find");
 			btnFind.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -227,5 +229,19 @@ public class FindUser extends JFrame {
 			btnFind.setBounds(197, 95, 97, 21);
 		}
 		return btnFind;
+	}
+	private JButton getBtnCancel() {
+		if (btnCancel == null) {
+			btnCancel = new JButton("Cancel");
+			btnCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new Login().setVisible(true);
+					FindUser.this.dispose();
+				}
+			});
+			btnCancel.setFont(new Font("Bookman Old Style", Font.BOLD, 14));
+			btnCancel.setBounds(197, 130, 97, 21);
+		}
+		return btnCancel;
 	}
 }

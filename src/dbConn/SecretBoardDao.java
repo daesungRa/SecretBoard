@@ -184,14 +184,29 @@ public class SecretBoardDao {
 	 * delete content
 	 */
 	public boolean delete(String serial) {
-		boolean b = false;
+		boolean result = false;
 		
 		try {
+			conn.setAutoCommit(false);
 			
+			sql = " delete sboard where serial = ? ";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, serial);
+			
+			int i = ps.executeUpdate();
+			
+			// 실행 성공한 DML 행 수만큼 반환됨
+			if (i > 0) {
+				result = true;
+				
+				conn.setAutoCommit(true);
+				conn.commit();
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			try {
 				conn.rollback();
+				conn.setAutoCommit(true);
 			} catch (Exception ex2) { }
 		} finally {
 			try {
@@ -199,7 +214,7 @@ public class SecretBoardDao {
 			} catch (Exception ex) {}
 		}
 		
-		return b;
+		return result;
 	}
 	
 	/*
