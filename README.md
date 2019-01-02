@@ -15,16 +15,28 @@ This is my semi-project for secret board
 
 ## 로직 흐름도
 
-![flow](https://github.com/daesungRa/SecretBoard/blob/master/content/projectArchi/sd3.png)
+![flow](https://github.com/daesungRa/SecretBoard/blob/master/content/projectArchi/sd3.PNG)
 
 ## 테이블 관계도
 
-![erd](https://github.com/daesungRa/SecretBoard/blob/master/content/projectArchi/sd4.png)
+![erd](https://github.com/daesungRa/SecretBoard/blob/master/content/projectArchi/sd4.PNG)
 
 ## 설명
 
-![Login](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Login.png)
-![Join](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Join.png)
+![Login](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Login.PNG)
+![Join](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Join.PNG)
+![FindUser](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/FindUser.PNG)
+![FindUser](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/FindUser.PNG)
+![Main](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Main.PNG)
+![AllContent](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/AllContent.PNG)
+![ContentByDate](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/ContentByDate.PNG)
+![Write](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Write.PNG)
+![WriteAction](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/WriteAction.PNG)
+![View](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/View.PNG)
+![Update](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Update.PNG)
+![UpdateResult](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/UpdateResult.PNG)
+![Delete](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Delete.PNG)
+![Logout](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Logout.PNG)
 
 
 ## Fixes
