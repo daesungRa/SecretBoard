@@ -214,6 +214,9 @@ public class FindUser extends JFrame {
 					if (resultVo.getId() != null) {
 						JOptionPane.showMessageDialog(FindUser.this, "[검색 결과]\n ID : " + resultVo.getId() + "\n PWD : " + resultVo.getPwd(), "Find User", 1);
 						
+						// 로그인 페이지로 이동
+						new Login().setVisible(true);
+						
 						// FindUser 닫기
 						FindUser.this.dispose();
 					} else {
