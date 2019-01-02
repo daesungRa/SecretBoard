@@ -26,7 +26,6 @@ This is my semi-project for secret board
 ![Login](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Login.PNG)
 ![Join](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Join.PNG)
 ![FindUser](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/FindUser.PNG)
-![FindUser](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/FindUser.PNG)
 ![Main](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Main.PNG)
 ![AllContent](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/AllContent.PNG)
 ![ContentByDate](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/ContentByDate.PNG)
