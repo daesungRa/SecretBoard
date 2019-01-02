@@ -41,10 +41,10 @@ public class UsersDao {
 		
 		try {
 			conn.setAutoCommit(false);
-			// 필수입력사항인 id, name, pwd, email, phone 만 입력
+			// 필수입력사항인 id, name, pwd, email, phone 만 입력 (+ serial 추가(190102))
 			// photo, photoori 는 추후 개인프로필 수정에서 등록 가능
-			sql = "insert into users (id, name, pwd, email, phone) values ( "
-					+ "	?, ?, ?, ?, ? ) ";
+			sql = "insert into users (id, name, pwd, email, phone, serial) values ( "
+					+ "	?, ?, ?, ?, ?, seq_users.nextval ) ";
 			
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, vo.getId());

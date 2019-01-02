@@ -190,41 +190,47 @@ public class Login extends JFrame {
 			btnLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					// 아이디와 패스워드 검증
 					String id = txtId.getText().trim();
 					// passwordField 는 char[] 로 반환되므로 String 으로 변환
-					@SuppressWarnings("deprecation")
-					String pwd = String.valueOf(txtPwd.getText().trim());
+					String pwd = String.valueOf(txtPwd.getPassword());
 					
-					// 입력된 아이디와 패스워드로 로그인 확인
-					UsersDao dao = new UsersDao();
-					int result = dao.login(id, pwd);
-					// System.out.println(result);
+					int result = 0;
 					
-					if (result == 1) {
+					// 공백 검사
+					if (!id.equals("") && !pwd.equals("")) {
+						// 입력된 아이디와 패스워드로 로그인 확인
+						UsersDao dao = new UsersDao();
+						result = dao.login(id, pwd);
+					}
+					
+					if (result == 1) { // 성공
 						Main main = new Main(id);
 						main.setVisible(true);
 						
 						// 로그인 성공했다면 현재 페이지는 닫음
 						Login.this.dispose();
-					} else if (result == 2) {
+					} else if (result == 2) { // 비번 실패
 						JOptionPane.showMessageDialog(Login.this, "입력하신 비밀번호가 다릅니다.", "Login Fail", 1);
-						
-						/*
-						// 비번만 포커싱
-						txtPwd.setText("insert Password");
-						txtPwd.requestFocus();
-						
-						// 버퍼에 13 이 남아있을 가능성이 있으므로 비워준다
-						String str = new Scanner(System.in).nextLine();
-						System.out.println(str);
-						*/
 						
 						// 일단 id 로 포커싱되게..
 						txtPwd.setText("insert Password");
 						txtId.requestFocus();
-					} else {
+					} else if (result == 3) { // 아이디 실패
 						JOptionPane.showMessageDialog(Login.this, "입력하신 아이디가 존재하지 않습니다.", "Login Fail", 1);
+						
+						// 각 필드 초기화 후 포커싱
+						txtId.setText("insert ID");
+						txtPwd.setText("insert Password");
+						txtId.requestFocus();
+					} else if (result == 0) { // 공백
+						JOptionPane.showMessageDialog(Login.this, "아이디 혹은 비밀번호를 입력하세요.", "Login Fail", 1);
+						
+						// 각 필드 초기화 후 포커싱
+						txtId.setText("insert ID");
+						txtPwd.setText("insert Password");
+						txtId.requestFocus();
+					} else { // 기타
+						JOptionPane.showMessageDialog(Login.this, "로그인 실패.", "Login Fail", 1);
 						
 						// 각 필드 초기화 후 포커싱
 						txtId.setText("insert ID");

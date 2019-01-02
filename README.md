@@ -15,9 +15,17 @@ This is my semi-project for secret board
 
 ## 로직 흐름도
 
+![flow](https://github.com/daesungRa/SecretBoard/blob/master/content/projectArchi/sd3.png)
+
 ## 테이블 관계도
 
-## Components
+![erd](https://github.com/daesungRa/SecretBoard/blob/master/content/projectArchi/sd4.png)
+
+## 설명
+
+![Login](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Login.png)
+![Join](https://github.com/daesungRa/SecretBoard/blob/master/content/중간결과물/Join.png)
+
 
 ## Fixes
 
@@ -27,6 +35,7 @@ This is my semi-project for secret board
 - <strong>[181226]</strong> Main.java 에서 유저의 모든 게시글에 대해 페이징 처리 완료 (이전, 이후 페이지, 1 페이지에서 마지막 페이지까지 순차적으로 표현)<br/>SBOARD 테이블에서 PWD 컬럼을 삭제함<br/>Write.java 페이지 레이아웃 및 로직 작성
 - <strong>[181227]</strong> 나머지 CRUD 기능 구현<br/>SBOARD 테이블의 ISPUBLIC 컬럼이 boolean 형을 저장하도록 속성 변경 및 제약조건 설정<br/>SBOARD 테이블의 ID 컬럼에 FK 제약조건 추가
 - <strong>[181228]</strong> 완성 (개인 페이지까지)<br>메인 페이지의 상단 달력 세팅 및 일별 글 조회, 하단 페이지라벨링 처리
+- <strong>[190102]</strong> USERS 테이블 제약조건 변경(drop USERS_ID_PK, add USERS_SERIAL_PK/USERS_ID_NN/USERS_ID_UK), SEQ_USERS 추가, 회원가입 쿼리 변경(SEQ_USERS.nextval 값이 serial 에 적용되도록), 회원가입 검증 로직 추가(공백, 이메일 포맷), 로그인 공백 검증 추가
 
 ## 개선할 점
 

@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -19,11 +18,10 @@ import javax.swing.border.LineBorder;
 import dbConn.UsersDao;
 import dbConn.UsersVo;
 
-import java.awt.SystemColor;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +48,17 @@ public class Join extends JFrame {
 	private JLabel lblPwd01;
 	private JButton btnCancel;
 
+	// 이메일 검증을 위한 포맷
+	private Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + 
+			"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+	private Matcher matcher;
+	
+	// 이메일 검증 메서드
+	public boolean emailValidate(final String email) {
+		matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -171,18 +180,16 @@ public class Join extends JFrame {
 			txtPwd01.addFocusListener(new FocusAdapter() {
 
 				// 포커싱 되면 블럭지정
-				@SuppressWarnings("deprecation")
 				@Override
 				public void focusGained(FocusEvent e) {
 					txtPwd01.setSelectionStart(0);
-					txtPwd01.setSelectionEnd(txtPwd01.getText().trim().length());
+					txtPwd01.setSelectionEnd(txtPwd01.getPassword().length);
 				}
 				
 				// 포커스 아웃될때 해당 필드가 비어있으면 화면에 비번입력 요청 메시지 출력
-				@SuppressWarnings("deprecation")
 				@Override
 				public void focusLost(FocusEvent fe) {
-					String pwd01 = txtPwd01.getText().trim();
+					String pwd01 = String.valueOf(txtPwd01.getPassword());
 					
 					if (pwd01.equals("")) {
 						lblPwd01.setText("plz input PASSWORD");
@@ -214,11 +221,41 @@ public class Join extends JFrame {
 					String name = txtName.getText().trim();
 					// 비번 - NN
 					// passwordField 의 반환형은 char[] 이므로 String 으로 변환
-					String pwd = String.valueOf(txtPwd02.getText().trim());
+					String pwd = String.valueOf(txtPwd02.getPassword());
 					// 이메일 - UK
 					String email = txtEmail.getText().trim();
 					// 폰 - UK
 					String phone = txtPhone.getText().trim();
+					
+					if (id.equals("")) {
+						JOptionPane.showMessageDialog(Join.this, "아이디를 입력하세요", "Join Fail", 1);
+						txtId.setText("insert ID");
+						txtId.requestFocus();
+						
+						return;
+					} else if (name.equals("")) {
+						JOptionPane.showMessageDialog(Join.this, "이름을 입력하세요", "Join Fail", 1);
+						txtName.setText("insert NAME");
+						txtName.requestFocus();
+						
+						return;
+					} else if (pwd.equals("")) {
+						JOptionPane.showMessageDialog(Join.this, "비밀번호를 입력하세요", "Join Fail", 1);
+						txtPwd01.requestFocus();
+						
+						return;
+					} else if (!emailValidate(email)) {
+						JOptionPane.showMessageDialog(Join.this, "이메일 형식이 맞지 않습니다", "Join Fail", 1);
+						txtEmail.requestFocus();
+						
+						return;
+					} else if (phone.equals("")) {
+						JOptionPane.showMessageDialog(Join.this, "전화번호를 입력하세요", "Join Fail", 1);
+						txtPhone.setText("insert PHONE");
+						txtPhone.requestFocus();
+						
+						return;
+					}
 					
 					// 검증된 정보를 기반으로 vo 객체 생성
 					UsersVo vo = new UsersVo(id, name, pwd, email, phone);
@@ -339,11 +376,10 @@ public class Join extends JFrame {
 			txtPwd02.addFocusListener(new FocusAdapter() {
 
 				// 포커스 아웃될때 해당 필드가 비어있으면 화면에 비번입력 요청 메시지 출력
-				@SuppressWarnings("deprecation")
 				@Override
 				public void focusLost(FocusEvent fe) {
-					String pwd01 = txtPwd01.getText().trim();
-					String pwd02 = txtPwd02.getText().trim();
+					String pwd01 = String.valueOf(txtPwd01.getPassword());
+					String pwd02 = String.valueOf(txtPwd02.getPassword());
 					
 					
 					if (!pwd01.equals("") && pwd02.equals("")) {
